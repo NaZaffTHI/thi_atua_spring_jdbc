@@ -11,6 +11,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import java.io.IOException;
 import java.time.LocalDate;
 
+// call via http://localhost:8080/createStudentForm.html
 @WebServlet(name = "StudentServlet", urlPatterns = "/create-student")
 public class CreateStudentServlet extends HttpServlet {
 
