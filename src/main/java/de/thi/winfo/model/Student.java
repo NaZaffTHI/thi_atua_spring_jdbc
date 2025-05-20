@@ -1,8 +1,9 @@
 package de.thi.winfo.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Student {
+public class Student implements Serializable {
     private final String id;
     private String firstName;
     private String lastName;
