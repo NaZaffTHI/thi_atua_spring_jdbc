@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: Student API
+  version: 1.0.0
+  description: REST API zur Verwaltung von Studenten
+
+servers:
+  - url: http://localhost:8080/api
+    description: Lokaler Entwicklungsserver
+
+paths:
+  /students:
+    get:
+      summary: Alle Studenten abrufen
+      operationId: getAllStudents
+      responses:
+        '200':
+          description: Liste aller Studenten
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+
+    post:
+      summary: Neuen Studenten anlegen
+      operationId: createStudent
+      requestBody:
+        description: Studentendaten
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentRequest'
+      responses:
+        '201':
+          description: Student erfolgreich erstellt
+          headers:
+            Location:
+              description: URI des erstellten Studenten
+              schema:
+                type: string
+
+  /students/{id}:
+    get:
+      summary: Student per ID abrufen
+      operationId: getStudentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Die ID des gesuchten Studenten
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Gefundener Student
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '404':
+          description: Student nicht gefunden
+
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        id:
+          type: string
+          example: JD2000
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        dateOfBirth:
+          type: string
+          format: date
+          example: 2000-01-01
+      required:
+        - id
+        - firstName
+        - lastName
+        - dateOfBirth
+
+    StudentRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        dateOfBirth:
+          type: string
+          format: date
+          example: 2000-01-01
+      required:
+        - firstName
+        - lastName
+        - dateOfBirth
