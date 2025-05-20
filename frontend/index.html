@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Studentenverwaltung</title>
+</head>
+<body>
+
+<h1>Studentenverwaltung</h1>
+
+<section>
+    <h2>Neuen Studenten anlegen</h2>
+    <form id="student-form">
+        <label>Vorname: <input type="text" id="firstName" required></label><br>
+        <label>Nachname: <input type="text" id="lastName" required></label><br>
+        <label>Geburtsdatum: <input type="date" id="dateOfBirth" required></label><br>
+        <button type="submit">Anlegen</button>
+    </form>
+</section>
+
+<hr>
+
+<section>
+    <h2>Alle Studenten</h2>
+    <button onclick="loadStudents()">Liste aktualisieren</button>
+    <div id="student-list"></div>
+</section>
+
+<script>
+    const API_BASE = 'http://localhost:8080/api/students';
+
+    document.getElementById('student-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const student = {
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            dateOfBirth: document.getElementById('dateOfBirth').value
+        };
+
+        const res = await fetch(API_BASE, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(student)
+        });
+
+        if (res.ok) {
+            alert('Student erfolgreich angelegt!');
+            loadStudents();
+            e.target.reset();
+        } else {
+            alert('Fehler beim Anlegen des Studenten.');
+        }
+    });
+
+    async function loadStudents() {
+        const res = await fetch(API_BASE);
+        const students = await res.json();
+
+        const list = document.getElementById('student-list');
+        list.innerHTML = '';
+
+        students.forEach(student => {
+            const div = document.createElement('div');
+            div.className = 'student-card';
+            div.innerHTML = `
+          <strong>${student.firstName} ${student.lastName}</strong><br>
+          ID: ${student.id}<br>
+          Geburtsdatum: ${student.dateOfBirth}
+        `;
+            list.appendChild(div);
+        });
+    }
+
+    // Beim Laden automatisch abrufen
+    window.onload = loadStudents;
+</script>
+</body>
+</html>
