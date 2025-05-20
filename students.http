@@ -1,0 +1,39 @@
+### GET all students
+GET http://localhost:8080/api/students
+
+### GET a student by their id
+GET http://localhost:8080/api/students/ZB1979
+Accept: application/json
+
+### CREATE a new student
+POST http://localhost:8080/api/students
+Content-Type: application/json
+
+{
+  "firstName": "Zaphod",
+  "lastName": "Beeblebrox",
+  "dateOfBirth": "1979-10-30"
+}
+
+
+######################################################################
+##################       NOT YET IMPLEMENTED      ####################
+######################################################################
+
+### GET students by name
+GET http://localhost:8080/api/students?lastname=Prefect
+Accept: application/json
+
+### DELETE a student
+DELETE http://localhost:8080/api/students/ZB1979
+
+### UPDATE a student
+PUT http://localhost:8080/api/students
+Content-Type: application/json
+
+{
+  "id": "ZB1979",
+  "firstName": "Zaphod",
+  "lastName": "NowWithNewName",
+  "dateOfBirth": "1979-10-30"
+}
