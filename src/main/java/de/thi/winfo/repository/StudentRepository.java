@@ -1,7 +1,7 @@
 package de.thi.winfo.repository;
 
 import de.thi.winfo.model.Student;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +16,7 @@ In this example only getAll and save is implemented.
 Usually there is also getById, delete, update or getByLastName etc.
 Error handling is not really implemented here, to keep this example lean.
  */
-@Component
+@Repository
 public class StudentRepository {
     private final DatabaseConnector dbConnector;
 
