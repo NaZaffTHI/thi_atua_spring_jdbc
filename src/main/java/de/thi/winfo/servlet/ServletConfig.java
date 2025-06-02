@@ -1,6 +1,5 @@
-package de.thi.winfo;
+package de.thi.winfo.servlet;
 
-import de.thi.winfo.servlet.HelloServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

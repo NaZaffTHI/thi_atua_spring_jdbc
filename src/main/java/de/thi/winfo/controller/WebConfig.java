@@ -1,4 +1,4 @@
-package de.thi.winfo;
+package de.thi.winfo.controller;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

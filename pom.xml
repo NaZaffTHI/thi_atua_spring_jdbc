@@ -26,24 +26,26 @@
     </properties>
 
     <dependencies>
+        <!--the following dependencies are for application setup in general. They're used no matter if REST, Servlets or SOAP is used-->
         <!--dependency to use Spring Boot (in general)-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <!--dependency to use Web Services via Spring Boot-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!--dependency to use a SQLite Database-->
+        <!--dependency to use a SQLite Database for storage-->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.46.1.2</version>
         </dependency>
 
-        <!--the following dependencies are necessary for servlets and jsp-->
+        <!--the following dependency to use REST services in Spring Boot-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--the following dependencies are necessary for servlets and JSP-->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
@@ -63,6 +65,18 @@
             <groupId>jakarta.el</groupId>
             <artifactId>jakarta.el-api</artifactId>
             <version>6.0.1</version>
+        </dependency>
+
+        <!--the following dependencies are necessary for SOAP and XML-->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.2</version>
         </dependency>
     </dependencies>
 

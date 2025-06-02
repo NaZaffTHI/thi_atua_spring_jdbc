@@ -1,13 +1,32 @@
 package de.thi.winfo.model;
 
+import de.thi.winfo.soap.LocalDateAdapter;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@XmlRootElement(name = "student")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Student implements Serializable {
+    @XmlElement
     private final String id;
+
+    @XmlElement(required = true)
     private String firstName;
+
+
+    @XmlElement(required = true)
     private String lastName;
-    private final LocalDate dateOfBirth;
+
+
+    @XmlElement(required = true)
+    @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    private LocalDate dateOfBirth;
 
     public Student() {
         this("default", "default", LocalDate.now());
@@ -48,5 +67,10 @@ public class Student implements Serializable {
         return "" + this.firstName.charAt(0)
                 + this.lastName.charAt(0)
                 + this.getDateOfBirth().getYear();
+    }
+
+    @Override
+    public String toString() {
+        return "Student [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + "]";
     }
 }

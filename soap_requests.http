@@ -1,0 +1,55 @@
+#Get WSDL at http://localhost:8080/soap/students?wsdl
+
+### get all students
+POST /soap/students HTTP/1.1
+Host: localhost:8080
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+        xmlns:soap="http://soap.winfo.thi.de/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <soap:getAll/>
+    </soapenv:Body>
+</soapenv:Envelope>
+
+
+### get a student by their id
+POST /soap/students HTTP/1.1
+Host: localhost:8080
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:soap="http://soap.winfo.thi.de/">
+<soapenv:Header/>
+<soapenv:Body>
+    <soap:getById>
+        <arg0>AD1978</arg0>
+    </soap:getById>
+</soapenv:Body>
+</soapenv:Envelope>
+
+
+### CREATE a new student
+POST /soap/students HTTP/1.1
+Host: localhost:8080
+Content-Type: text/xml;charset=UTF-8
+SOAPAction: ""
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:soap="http://soap.winfo.thi.de/">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <soap:create>
+            <arg0>
+                <firstName>Arthur</firstName>
+                <lastName>Dent</lastName>
+                <dateOfBirth>1978-03-08</dateOfBirth>
+            </arg0>
+        </soap:create>
+    </soapenv:Body>
+</soapenv:Envelope>
