@@ -1,79 +1,130 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Studentenverwaltung</title>
+    <meta charset="UTF-8"/>
+    <title>📚 Student Administration</title>
+    <link href="styles.css" rel="stylesheet"/>
 </head>
 <body>
-
-<h1>Studentenverwaltung</h1>
+<h1>📚 Student Administration</h1>
 
 <section>
-    <h2>Neuen Studenten anlegen</h2>
-    <form id="student-form">
-        <label>Vorname: <input type="text" id="firstName" required></label><br>
-        <label>Nachname: <input type="text" id="lastName" required></label><br>
-        <label>Geburtsdatum: <input type="date" id="dateOfBirth" required></label><br>
-        <button type="submit">Anlegen</button>
-    </form>
+    <h2>🔍 Load all students</h2>
+    <button onclick="loadAllStudents()">Load</button>
+    <div id="allStudents">no students retrieved yet...</div>
 </section>
 
-<hr>
+<section>
+    <h2>🔎 Get a student by its ID</h2>
+    <label for="studentId">Student ID:</label>
+    <input id="studentId" placeholder="e.g. ZB1979" type="text"/>
+    <button onclick="loadStudentById()">Search</button>
+    <pre id="studentById">no student retrieved yet...</pre>
+</section>
 
 <section>
-    <h2>Alle Studenten</h2>
-    <button onclick="loadStudents()">Liste aktualisieren</button>
-    <div id="student-list"></div>
+    <h2>➕ Create a new student</h2>
+    <label>Firstname</label>
+    <input id="firstName" placeholder="Zaphod" type="text"/>
+    <label>Lastname</label>
+    <input id="lastName" placeholder="Beeblebrox" type="text"/>
+    <label>Date of birth</label>
+    <input id="dateOfBirth" type="date"/>
+    <button onclick="createStudent()">Create</button>
+    <pre id="createResult">No student created yet...</pre>
 </section>
 
 <script>
-    const API_BASE = 'http://localhost:8080/api/students';
+    const baseUrl = 'http://localhost:8080/api/students';
 
-    document.getElementById('student-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    async function loadAllStudents() {
+        try {
+            const result = await fetch(baseUrl);
+            const data = await result.json();
 
-        const student = {
-            firstName: document.getElementById('firstName').value,
-            lastName: document.getElementById('lastName').value,
-            dateOfBirth: document.getElementById('dateOfBirth').value
-        };
+            console.log("student data from server: " + JSON.stringify(data));
 
-        const res = await fetch(API_BASE, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(student)
-        });
-
-        if (res.ok) {
-            alert('Student erfolgreich angelegt!');
-            loadStudents();
-            e.target.reset();
-        } else {
-            alert('Fehler beim Anlegen des Studenten.');
+            renderStudentsTable(data);
+        } catch (err) {
+            document.getElementById('allStudents').innerHTML = '❌ Error loading students.';
         }
-    });
-
-    async function loadStudents() {
-        const res = await fetch(API_BASE);
-        const students = await res.json();
-
-        const list = document.getElementById('student-list');
-        list.innerHTML = '';
-
-        students.forEach(student => {
-            const div = document.createElement('div');
-            div.className = 'student-card';
-            div.innerHTML = `
-          <strong>${student.firstName} ${student.lastName}</strong><br>
-          ID: ${student.id}<br>
-          Geburtsdatum: ${student.dateOfBirth}
-        `;
-            list.appendChild(div);
-        });
     }
 
-    // Beim Laden automatisch abrufen
-    window.onload = loadStudents;
+    function renderStudentsTable(students) {
+        if (!students.length) {
+            document.getElementById('allStudents').innerHTML = '⚠️ No students found.';
+            return;
+        }
+
+        document.getElementById('allStudents').innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Vorname</th>
+              <th>Nachname</th>
+              <th>Geburtsdatum</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${students.map(student => `
+              <tr>
+                <td>${student.id || '-'}</td>
+                <td>${student.firstName}</td>
+                <td>${student.lastName}</td>
+                <td>${student.dateOfBirth}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    async function loadStudentById() {
+        const id = document.getElementById('studentId').value.trim();
+        if (!id) return alert('Please enter a valid student ID.');
+        try {
+            const res = await fetch(`${baseUrl}/${id}`);
+            if (!res.ok) {
+                throw new Error('Not found');
+            }
+            const data = await res.json();
+            document.getElementById('studentById').textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+            document.getElementById('studentById').textContent = '❌ Student could not be found or error.';
+        }
+    }
+
+    async function createStudent() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const dateOfBirth = document.getElementById('dateOfBirth').value;
+
+        if (!firstName || !lastName || !dateOfBirth) {
+            return alert('Please add data to all fields.');
+        }
+
+        const payload = {firstName, lastName, dateOfBirth};
+
+        try {
+            const res = await fetch(baseUrl, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                throw new Error(`Error creating the student: ${errorText}`);
+            }
+
+            document.getElementById('createResult').textContent = '✅ Student created';
+            loadAllStudents();
+
+        } catch (err) {
+            document.getElementById('createResult').textContent = `❌ Error creating the student: ${err.message}`;
+        }
+    }
 </script>
 </body>
 </html>
